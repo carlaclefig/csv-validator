@@ -1,0 +1,33 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": " Data Upload and Validation System with Authentication",
+  "license": "ISC",
+  "author": "Carla Clemente",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "db:migrate": "node migrations/run.js",
+    "db:seed": "node seeds/run.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "csv-parse": "^6.2.1",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.1.1",
+    "pg": "^8.21.0"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.8",
+    "supertest": "^7.2.2",
+    "vitest": "^4.1.8"
+  }
+}
