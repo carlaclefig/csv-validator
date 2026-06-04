@@ -14,6 +14,10 @@
     "db:migrate": "node migrations/run.js",
     "db:seed": "node seeds/run.js"
   },
+  "vitest": {
+    "environment": "node",
+    "globals": true
+  },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
