@@ -1,0 +1,22 @@
+name,email,age
+Juan Perez,juan.perez@example.com,28
+Maria Lopez,maria.lopez@example.com,35
+Ana Garcia,ana.garcia@example.com,25
+Carlos Ruiz,carlos.ruiz@example.com,40
+Luis Torres,luis.torres@example.com,22
+
+,correomal,0
+Carlos,carlos@example.com,200
+Pedro,pedro@example.com,25s
+,,,,
+Roberto,,30
+,roberto@example.com,
+Lucia,luciamail,abcsí, 
+Maria,maria@example.com,-5
+Jose,jose@example.com,0
+,,
+Juan,juan@,28
+Ana,@example.com,25
+Luis,luis@example,
+,,
+Carmen,carmen@example.com,99
