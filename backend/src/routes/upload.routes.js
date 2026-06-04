@@ -17,27 +17,42 @@ const upload = multer({
   },
 });
 
-router.post("/upload", verifyAdmin, upload.single("file"), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({
+router.post(
+  "/upload",
+  verifyAdmin,
+  (req, res, next) => {
+    upload.single("file")(req, res, (err) => {
+      if (err) {
+        return res.status(400).json({
+          ok: false,
+          message: err.message,
+        });
+      }
+      next();
+    });
+  },
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({
+          ok: false,
+          message: "No se proporcionó ningún archivo",
+        });
+      }
+
+      const { success, errors } = await processCSV(req.file.buffer);
+
+      res.json({
+        ok: true,
+        data: { success, errors },
+      });
+    } catch (error) {
+      res.status(500).json({
         ok: false,
-        message: "No se proporcionó ningún archivo",
+        message: error.message,
       });
     }
-
-    const { success, errors } = await processCSV(req.file.buffer);
-
-    res.json({
-      ok: true,
-      data: { success, errors },
-    });
-  } catch (error) {
-    res.status(500).json({
-      ok: false,
-      message: error.message,
-    });
-  }
-});
+  },
+);
 
 export default router;
