@@ -33,6 +33,7 @@ function parseCSV(buffer) {
         columns: true,
         skip_empty_lines: true,
         trim: true,
+        relax_column_count: true,
       },
       (err, records) => {
         if (err) reject(err);
@@ -49,6 +50,9 @@ export async function processCSV(fileBuffer) {
 
   for (let i = 0; i < records.length; i++) {
     const row = records[i];
+
+    if (!row.name && !row.email && !row.age) continue;
+
     const rowErrors = validateRow(row, i);
 
     if (Object.keys(rowErrors).length > 0) {
