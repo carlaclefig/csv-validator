@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+import authRoutes from "./routes/auth.routes.js";
 
 dotenv.config();
 
@@ -17,11 +18,10 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// Aquí iran las rutas
-app.get("/", (req, res) => {
-  res.json({ message: "Servidor funcionando ✅" });
-});
+app.use("/api", authRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
+
+export default app;
