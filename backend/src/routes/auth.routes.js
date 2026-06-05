@@ -28,4 +28,13 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.post("/logout", (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+  });
+  res.json({ ok: true, message: "Sesión cerrada correctamente" });
+});
+
 export default router;

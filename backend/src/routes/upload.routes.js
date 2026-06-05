@@ -1,7 +1,7 @@
 import { Router } from "express";
 import multer from "multer";
 import { verifyAdmin } from "../middleware/auth.middleware.js";
-import { processCSV } from "../services/csv.service.js";
+import { processCSV, retryRecords } from "../services/csv.service.js";
 
 const router = Router();
 
@@ -54,5 +54,30 @@ router.post(
     }
   },
 );
+
+router.post("/upload/retry", verifyAdmin, async (req, res) => {
+  try {
+    const { records } = req.body;
+
+    if (!records || !Array.isArray(records) || records.length === 0) {
+      return res.status(400).json({
+        ok: false,
+        message: "No se proporcionaron registros para reenviar",
+      });
+    }
+
+    const { success, errors } = await retryRecords(records);
+
+    res.json({
+      ok: true,
+      data: { success, errors },
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      message: error.message,
+    });
+  }
+});
 
 export default router;
