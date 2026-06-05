@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { uploadCSV } from "../services/api";
+import { logout, uploadCSV } from "../services/api";
 import Dashboard from "../components/Dashboard";
 import ErrorTable from "../components/ErrorTable";
 import CollapsibleSection from "../components/CollapsibleSection";
@@ -13,10 +13,16 @@ function Upload({ onLogout }) {
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
 
-  const handleLogout = () => {
-    onLogout();
-    navigate("/login");
-  };
+  const handleLogout = async () => {
+  try {
+    await logout()
+  } catch (err) {
+    console.error('Error al cerrar sesión:', err)
+  } finally {
+    onLogout()
+    navigate('/login')
+  }
+}
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
