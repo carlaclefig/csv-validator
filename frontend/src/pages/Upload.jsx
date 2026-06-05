@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { uploadCSV } from '../services/api'
+import Dashboard from '../components/Dashboard'
 
 function Upload({ onLogout }) {
   const navigate = useNavigate()
@@ -59,7 +60,6 @@ function Upload({ onLogout }) {
 
       <main className="max-w-5xl mx-auto px-4 py-8 space-y-6">
 
-        {/* Sección Upload */}
         <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6">
           <h2 className="text-base font-semibold text-slate-800 mb-1">
             Cargar archivo CSV
@@ -87,6 +87,12 @@ function Upload({ onLogout }) {
           )}
         </div>
 
+        {result && (
+          <Dashboard
+            success={result.success}
+            errors={result.errors}
+          />
+        )}
       </main>
     </div>
   )
