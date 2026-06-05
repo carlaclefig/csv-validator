@@ -4,6 +4,7 @@ import { uploadCSV } from "../services/api";
 import Dashboard from "../components/Dashboard";
 import ErrorTable from "../components/ErrorTable";
 import CollapsibleSection from "../components/CollapsibleSection";
+import SuccessTable from "../components/SuccessTable";
 
 function Upload({ onLogout }) {
   const navigate = useNavigate();
@@ -104,6 +105,16 @@ function Upload({ onLogout }) {
                 }))
               }
             />
+          </CollapsibleSection>
+        )}
+
+        {result && result.success.length > 0 && (
+          <CollapsibleSection
+            title={`Registros cargados correctamente (${result.success.length})`}
+            subtitle="Haz clic para ver más detalles."
+            defaultOpen={false}
+          >
+            <SuccessTable success={result.success} />
           </CollapsibleSection>
         )}
       </main>
