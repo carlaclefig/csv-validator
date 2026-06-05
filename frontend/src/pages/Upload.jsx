@@ -1,45 +1,44 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { uploadCSV } from '../services/api'
-import Dashboard from '../components/Dashboard'
-import ErrorTable from '../components/ErrorTable'
-import CollapsibleSection from '../components/CollapsibleSection'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { uploadCSV } from "../services/api";
+import Dashboard from "../components/Dashboard";
+import ErrorTable from "../components/ErrorTable";
+import CollapsibleSection from "../components/CollapsibleSection";
 
 function Upload({ onLogout }) {
-  const navigate = useNavigate()
-  const [file, setFile] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState(null)
-  const [error, setError] = useState('')
+  const navigate = useNavigate();
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState("");
 
   const handleLogout = () => {
-    onLogout()
-    navigate('/login')
-  }
+    onLogout();
+    navigate("/login");
+  };
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0])
-    setResult(null)
-    setError('')
-  }
+    setFile(e.target.files[0]);
+    setResult(null);
+    setError("");
+  };
 
   const handleUpload = async () => {
-    if (!file) return
-    setLoading(true)
-    setError('')
+    if (!file) return;
+    setLoading(true);
+    setError("");
     try {
-      const data = await uploadCSV(file)
-      setResult(data.data)
+      const data = await uploadCSV(file);
+      setResult(data.data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Error al procesar el archivo')
+      setError(err.response?.data?.message || "Error al procesar el archivo");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
-
       <header className="bg-white border-b border-slate-200 px-4 sm:px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <h1 className="text-base sm:text-lg font-bold text-slate-800">
@@ -60,7 +59,6 @@ function Upload({ onLogout }) {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-8 space-y-6">
-
         <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6">
           <h2 className="text-base font-semibold text-slate-800 mb-1">
             Cargar archivo CSV
@@ -80,19 +78,14 @@ function Upload({ onLogout }) {
               disabled={!file || loading}
               className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors whitespace-nowrap w-full sm:w-auto"
             >
-              {loading ? 'Procesando...' : 'Upload File'}
+              {loading ? "Procesando..." : "Upload File"}
             </button>
           </div>
-          {error && (
-            <p className="text-red-600 text-sm mt-3">{error}</p>
-          )}
+          {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
         </div>
 
         {result && (
-          <Dashboard
-            success={result.success}
-            errors={result.errors}
-          />
+          <Dashboard success={result.success} errors={result.errors} />
         )}
 
         {result && result.errors.length > 0 && (
@@ -103,15 +96,19 @@ function Upload({ onLogout }) {
           >
             <ErrorTable
               errors={result.errors}
-              onErrorsUpdate={(updated) =>
-                setResult(prev => ({ ...prev, errors: updated }))
+              onErrorsUpdate={(updatedErrors, newSuccess = []) =>
+                setResult((prev) => ({
+                  ...prev,
+                  errors: updatedErrors,
+                  success: [...prev.success, ...newSuccess],
+                }))
               }
             />
           </CollapsibleSection>
         )}
       </main>
     </div>
-  )
+  );
 }
 
-export default Upload
+export default Upload;

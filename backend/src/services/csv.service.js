@@ -79,3 +79,36 @@ export async function processCSV(fileBuffer) {
 
   return { success, errors };
 }
+
+export async function retryRecords(records) {
+  const success = [];
+  const errors = [];
+
+  for (let i = 0; i < records.length; i++) {
+    const { row, data } = records[i];
+    const rowErrors = validateRow(data);
+
+    if (Object.keys(rowErrors).length > 0) {
+      errors.push({ row, data, details: rowErrors });
+    } else {
+      const result = await pool.query(
+        `INSERT INTO users (name, email, age, role)
+         VALUES ($1, $2, $3, 'user')
+         ON CONFLICT (email) DO NOTHING
+         RETURNING *`,
+        [
+          data.name.trim(),
+          data.email.trim(),
+          data.age ? Number(data.age) : null,
+        ],
+      );
+
+      if (result.rows[0]) {
+        const { password, ...user } = result.rows[0];
+        success.push(user);
+      }
+    }
+  }
+
+  return { success, errors };
+}
