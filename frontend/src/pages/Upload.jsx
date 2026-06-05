@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { uploadCSV } from '../services/api'
 import Dashboard from '../components/Dashboard'
+import ErrorTable from '../components/ErrorTable'
+import CollapsibleSection from '../components/CollapsibleSection'
 
 function Upload({ onLogout }) {
   const navigate = useNavigate()
@@ -38,7 +40,6 @@ function Upload({ onLogout }) {
   return (
     <div className="min-h-screen bg-slate-50">
 
-      {/* Header */}
       <header className="bg-white border-b border-slate-200 px-4 sm:px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <h1 className="text-base sm:text-lg font-bold text-slate-800">
@@ -92,6 +93,21 @@ function Upload({ onLogout }) {
             success={result.success}
             errors={result.errors}
           />
+        )}
+
+        {result && result.errors.length > 0 && (
+          <CollapsibleSection
+            title={`Corrige los registros con errores (${result.errors.length})`}
+            subtitle="Edita los campos y reenvía cada página de registros."
+            defaultOpen={true}
+          >
+            <ErrorTable
+              errors={result.errors}
+              onErrorsUpdate={(updated) =>
+                setResult(prev => ({ ...prev, errors: updated }))
+              }
+            />
+          </CollapsibleSection>
         )}
       </main>
     </div>
